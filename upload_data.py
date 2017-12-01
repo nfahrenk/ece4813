@@ -1,10 +1,10 @@
 import pymysql
 import xlrd
 
-USERNAME = 'yotam'
-PASSWORD = '1hahaha2'
-DB_NAME = 'mydb'
-END_POINT = 'final.c181f2fcenzx.us-east-2.rds.amazonaws.com'
+USERNAME = ''
+PASSWORD = ''
+DB_NAME = ''
+END_POINT = ''
 
 conn = pymysql.connect(host=END_POINT, port=3306, user=USERNAME, passwd=PASSWORD, db=DB_NAME)
 
