@@ -1,10 +1,11 @@
 import pymysql
 import xlrd
+import pdb
 
-USERNAME = ''
-PASSWORD = ''
-DB_NAME = ''
-END_POINT = ''
+USERNAME = 'root'
+PASSWORD = 'password'
+DB_NAME = 'DBPROJECT'
+END_POINT = 'ece4813-project-rds.cvei3yvcg2ng.us-east-2.rds.amazonaws.com'
 
 conn = pymysql.connect(host=END_POINT, port=3306, user=USERNAME, passwd=PASSWORD, db=DB_NAME)
 
@@ -18,6 +19,7 @@ def exec_sql(statement):
     #print (statement)
     cur = conn.cursor()
     cur.execute(statement)
+    conn.commit()
     cur.close()
 
 def create_table():
@@ -26,7 +28,10 @@ def create_table():
 
 def insert_row(index):
     statement = "INSERT INTO Malware VALUES("
-    sha = str(sheet.cell(index, 0).value)
+    try:
+        sha = str(sheet.cell(index, 0).value)
+    except:
+        pdb.set_trace()
     sha = sha[:32]
     statement = statement + "'" + sha + "', "
     for i in range(1, 9):
@@ -62,6 +67,6 @@ def insert_rows(num_rows):
         i = i + 2
 
 # create_table()
-# insert_rows(10)
-# get_all()
+insert_rows(359)
+get_all()
 conn.close()
