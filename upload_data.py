@@ -37,7 +37,41 @@ def insert_row(index):
     for i in range(1, 9):
         val = str(sheet.cell(index, i).value)
         if len(val) > 0:
-            if i != 4:
+            if i == 2:
+                time = sheet.cell(index, i).value
+                hour = math.floor(time * 24.0)
+
+                time = time - (hour / 24.0)
+                minute = math.floor(time * 60.0 * 24)
+
+                time = time - (minute / (60 * 24))
+                second = math.floor(time * 60 * 60 * 24)
+
+                if hour > 11:
+                    val = " PM"
+                    hour = hour - 12
+                else:
+                    val = " AM"
+
+                if hour == 0:
+                    hour = 12
+
+                minute = int(minute)
+                if minute < 10:
+                    minute = "0" + str(minute)
+                else:
+                    minute = str(minute)
+                
+                second = int(second)
+                if second < 10:
+                    second = "0" + str(second)
+                else:
+                    second = str(second)
+
+                val = str(int(hour)) + ":" + minute + ":" + second + val
+                statement = statement + "'" + val + "', "
+
+            elif i != 4:
                 statement = statement + "'" + val + "', "
             else:
                 statement = statement + val + ", "
