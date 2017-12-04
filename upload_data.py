@@ -9,7 +9,7 @@ END_POINT = 'ece4813-project-rds.cvei3yvcg2ng.us-east-2.rds.amazonaws.com'
 
 conn = pymysql.connect(host=END_POINT, port=3306, user=USERNAME, passwd=PASSWORD, db=DB_NAME)
 
-workbook = xlrd.open_workbook('data.xls')
+workbook = xlrd.open_workbook('data2.xls')
 sheet = workbook.sheet_by_index(0)
 heads = []
 for i in range(0, 10):
@@ -49,8 +49,10 @@ def insert_row(index):
         statement = statement + "'" + val + "')"
     else:
         statement = statement + "NULL)"
-
-    exec_sql(statement)
+    try:
+        exec_sql(statement)
+    except pymysql.err.IntegrityError:
+        print "IntegrityError"
 
 def get_all():
     cur = conn.cursor()

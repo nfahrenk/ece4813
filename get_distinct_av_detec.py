@@ -23,7 +23,7 @@ if __name__ == '__main__':
         port = 3306
     )
     cursor = conn.cursor()
-    cursor.execute("SELECT DISTINCT av_detec FROM Malware;")
+    cursor.execute("SELECT * FROM Malware LIMIT 1 OFFSET 8;")
     results = cursor.fetchall()
     print results
     cursor.close()
