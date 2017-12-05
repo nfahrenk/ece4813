@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>{% block title %}{% endblock %}</title>
+    <title>Malware App</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
@@ -14,38 +14,26 @@
 </head>
 
 <style type="text/css">
-    .table.table-striped {
-        width: 75%;
+    form {
+        width: 50%;
         margin: 0 auto;
         border-width: 1px;
-        background-color: rgba(150, 150, 150, 0.26);
         border-color: #000000;
     }
 </style>
 
+
 <body>
 
     <center>
-    <h1>Student App</h1>
-    
+        <h1>{% block title %}{% endblock %}</h1>
     <br>
-    <h4>{% block subtitle %} {% endblock %}</h4>   
-    
-    <br>
-    <h4>
-        <a href="/">View Students</a> | 
-        <a href="/student/add">Add Student</a> | 
-        <a href="/course">View Courses</a> |
-        <a href="/student/course">View Takes</a> |        
-        <a href="/course/add">Add Course</a> |
-        <a href="/register">Register</a>
-    </h4>
+    <h4><a href="/">View All Malware</a> | <a href="/malware/add">Add Malware</a></h4>
     </center>
 
     <br>
-{% block content %}
-{% endblock %}
 
+    {% block content %}
+    {% endblock %}
 </body>
-
 </html>
