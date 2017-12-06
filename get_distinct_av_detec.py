@@ -23,7 +23,7 @@ if __name__ == '__main__':
         port = 3306
     )
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM Malware LIMIT 1 OFFSET 8;")
+    cursor.execute("SELECT sha256,ip_address FROM Malware WHERE ip_address LIKE '%255.255.255.255%' LIMIT 3;")
     results = cursor.fetchall()
     print results
     cursor.close()
