@@ -62,6 +62,11 @@ def list_malware():
                             next_page=malware.json()['next_page'],
                             prev_page=malware.json()['prev_page'])
 
+@app.route('/addMalware', methods=['GET','POST'])
+def add_malware():
+    if request.method == 'GET':
+        return render_template('addMalware.html')
+
 if __name__ == '__main__':
     if MACHINE == 'local':
         app.run(debug=True, port=5000)
