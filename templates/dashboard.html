@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>{% block title %}{% endblock %}</title>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<style type="text/css">
+    .table.table-striped {
+        width: 75%;
+        margin: 0 auto;
+        border-width: 1px;
+        background-color: rgba(150, 150, 150, 0.26);
+        border-color: #000000;
+    }
+</style>
+
+<body>
+    <div id="myDiv"></div>
+    <script>
+        var trace1 = {
+        x: [1, 2, 3, 4],
+        y: [10, 15, 13, 17],
+        mode: 'markers'
+        };
+        var data = [ trace1 ];
+
+        var layout = {
+        title:'Line and Scatter Plot'
+        };
+
+        //Plotly.newPlot('myDiv', data, layout);
+        var x1 = '{{ latitudes[1] }}';
+        var y1 = '{{ longitudes[1] }}';
+        var x2 = '{{ latitudes[2] }}';
+        var y2 = '{{ longitudes[2] }}';
+        var x3 = '{{ latitudes[3] }}';
+        var y3 = '{{ longitudes[3] }}';
+        var x4 = '{{ latitudes[4] }}';
+        var y4 = '{{ longitudes[4] }}';
+        var x5 = '{{ latitudes[5] }}';
+        var y5 = '{{ longitudes[5] }}';
+        var x6 = '{{ latitudes[6] }}';
+        var y6 = '{{ longitudes[6] }}';
+        var x7 = '{{ latitudes[7] }}';
+        var y7 = '{{ longitudes[7] }}';
+        var x8 = '{{ latitudes[8] }}';
+        var y8 = '{{ longitudes[8] }}';
+        Plotly.plot('myDiv', [{
+            x: [-180, x1, x2, x3, x4, x5, x6, x7, x8, 180],
+            y: [-90, y1, y2, y3, y4, y5, y6, y7, y8, 90],
+            mode: 'markers',
+            type: 'scatter'
+        }], {
+        images: [
+            {
+                "source": "https://openclipart.org/download/19481/shokunin-world-map-more-detail.svg",
+                "xref": "x",
+                "yref": "y",
+                "x": -180,
+                "y": 90,
+                "sizex": 360,
+                "sizey": 180,
+                "sizing": "stretch",
+                "opacity": 0.9,
+                "layer": "below"
+            }
+        ]
+        })
+    </script>
+
+</body>
+
+</html>
