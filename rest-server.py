@@ -66,6 +66,9 @@ def list_malware():
 def add_malware():
     if request.method == 'GET':
         return render_template('addMalware.html')
+    else:
+        #List of malware displayed after new malware has been added
+        list_malware()
 
 if __name__ == '__main__':
     if MACHINE == 'local':
