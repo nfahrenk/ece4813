@@ -37,9 +37,7 @@
 {% block title %}Index{% endblock %}
 {% block content %}
 <p>Your ip is: {{ip_address}}</p>
-<div class="has-malware">
-    {{ "Your IP is in the database" if has_ip else "You are not in the database" }}
-</div>
+<p>{{ "Your IP is in the database" if has_ip else "You are not in the database" }}</p>
 <h2>Hottest Malware</h2>
 <table id="malware">
     <tr>
