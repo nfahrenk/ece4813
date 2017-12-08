@@ -1,4 +1,4 @@
-from rest_server import application
+from rest_server import app
 
 if __name__ == "__main__":
-    application.run()
+    app.run()
