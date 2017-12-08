@@ -47,6 +47,10 @@ def add_malware():
         #List of malware displayed after new malware has been added
         list_malware()
 
+@app.route('/map', methods=['GET'])
+def map_malware():
+    return render_template('map.html')
+        
 @app.route('/', methods=['GET'])
 def check():
     response = requests.get(BASE_URL + "/check").json()
