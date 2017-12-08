@@ -1,4 +1,4 @@
-[
+AV_DETEC_OPTIONS = [
     'Win.Trojan.11845790',
     'None',
     'WIN.Worm.Brontok',
