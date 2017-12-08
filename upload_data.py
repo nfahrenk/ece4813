@@ -3,6 +3,7 @@ import xlrd
 import pdb
 import math as math
 import json
+from geoip import geolite2
 
 USERNAME = 'root'
 PASSWORD = 'password'
@@ -25,7 +26,8 @@ def exec_sql(statement):
     cur.close()
 
 def create_table():
-    statement = "CREATE TABLE Malware (" + heads[0] + " varchar(64) NOT NULL, " + heads[1] + " varchar(20), " + heads[2] + " datetime(6), " + heads[3] + " varchar(30), " + heads[4] + " FLOAT, " + heads[5] + " varchar(50), " + heads[7] + " varchar(50), "  + heads[9] + " varchar(500), " + "PRIMARY KEY (" + heads[0] + ")) "
+    statement = "CREATE TABLE MyMalware (" + heads[0] + " varchar(64) NOT NULL, " + heads[1] + " varchar(20), " + heads[2] + " datetime(6), " + heads[3] + " varchar(30), " + heads[4] + " FLOAT, " + heads[5] + " varchar(50), " + heads[7] + " varchar(50), "  + heads[9] + " varchar(500), longitude varchar(20), latitude varchar(20), PRIMARY KEY (" + heads[0] + ")) "
+    print statement
     exec_sql(statement)
 
 def insert_row(index):
@@ -91,7 +93,7 @@ def insert_row(index):
         print "IntegrityError"
 
 def insert_data_row(row):
-    statement = "INSERT INTO Malware VALUES("
+    statement = "INSERT INTO MyMalware VALUES("
 
     for i in range(0, len(row)):
         if i == 4:
@@ -130,6 +132,15 @@ def insert_data():
             else:
                 ips = ips[0]
 
+            lon = 'None'
+            lat = 'None'
+
+            if ip != 'None' and ip is not None:
+                match = geolite2.lookup(ip['ip'])
+                if match is not None:
+                    lon = match.location[0]
+                    lat = match.location[1]
+
             str_d = str(d)
             place = str_d.find('Detect')
 
@@ -153,13 +164,15 @@ def insert_data():
                 sus_score,
                 sources,
                 av,
-                ips
+                ips,
+                lon,
+                lat
             ]
             insert_data_row(row)
 
 def get_all():
     cur = conn.cursor()
-    cur.execute("SELECT * FROM Malware;")
+    cur.execute("SELECT * FROM MyMalware;")
     result = cur.fetchall()
     # for row in result:
     #     print row
@@ -177,14 +190,14 @@ def insert_rows2(num_rows):
         insert_row(i)
 
 def delete_table():
-    statement = "DELETE FROM Malware"
+    statement = "DELETE FROM MyMalware"
     try:
         exec_sql(statement)
     except pymysql.err.IntegrityError:
         print "IntegrityError"
 
 def drop_table():
-    statement = "DROP TABLE Malware"
+    statement = "DROP TABLE MyMalware"
     try:
         exec_sql(statement)
     except pymysql.err.IntegrityError:
@@ -193,7 +206,7 @@ def drop_table():
 # drop_table()
 # create_table()
 # insert_rows2(1141)
-delete_table()
+# delete_table()
 insert_data()
 get_all()
 conn.close()
