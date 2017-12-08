@@ -2,6 +2,7 @@ import pymysql
 import xlrd
 import pdb
 import math as math
+import json
 
 USERNAME = 'root'
 PASSWORD = 'password'
@@ -24,7 +25,7 @@ def exec_sql(statement):
     cur.close()
 
 def create_table():
-    statement = "CREATE TABLE Malware (" + heads[0] + " varchar(64) NOT NULL, " + heads[1] + " varchar(20), " + heads[2] + " varchar(20), " + heads[3] + " varchar(30), " + heads[4] + " FLOAT, " + heads[5] + " varchar(50), " + heads[6] + " varchar(20), " + heads[7] + " varchar(50), " + heads[8] + " varchar(250), " + heads[9] + " varchar(500), " + "PRIMARY KEY (" + heads[0] + ")) "
+    statement = "CREATE TABLE Malware (" + heads[0] + " varchar(64) NOT NULL, " + heads[1] + " varchar(20), " + heads[2] + " datetime(6), " + heads[3] + " varchar(30), " + heads[4] + " FLOAT, " + heads[5] + " varchar(50), " + heads[7] + " varchar(50), "  + heads[9] + " varchar(500), " + "PRIMARY KEY (" + heads[0] + ")) "
     exec_sql(statement)
 
 def insert_row(index):
@@ -89,13 +90,81 @@ def insert_row(index):
     except pymysql.err.IntegrityError:
         print "IntegrityError"
 
+def insert_data_row(row):
+    statement = "INSERT INTO Malware VALUES("
+
+    for i in range(0, len(row)):
+        if i == 4:
+            statement = statement + str(row[i]) + ", "
+        else:
+            statement = statement + "'" + str(row[i]) + "', "
+    statement = statement[:-2]
+    statement = statement + ")"
+    # print statement
+    # print ""
+
+    try:
+        exec_sql(statement)
+    except pymysql.err.IntegrityError:
+        pass
+        # print statement
+
+def insert_data():
+    with open('results.txt','r') as infile: 
+        for line in infile:
+            d = json.loads(line)
+            sample = d['sample']
+            ingest_date = sample['ingest_date']
+            sus_score = d['sample']['suspicion']['score']
+            sha256 = d['sample']['hashes']['sha256']
+            file_type = d['sample']['type']
+            file_name = d['pcap']['name']
+            sources = '(UNKNOWN) at ' + d['sample']['sources'][0]['customer']['customer_since']
+            http = d['network']['http']
+            ips = []
+            for ip in http:
+                ips.append(d['network']['http'][0]['ip'])
+
+            if len(ips) < 1:
+                ips = 'None'
+            else:
+                ips = ips[0]
+
+            str_d = str(d)
+            place = str_d.find('Detect')
+
+            av = 'None'
+            if place != -1:
+                str_d = str_d[place:(place + 100)]
+                place = str_d.find("'")
+                str_d = str_d[place:]
+                str_d = str_d[1:]
+                place = str_d.find("'")
+                str_d = str_d[place:]
+                str_d = str_d[1:]
+                s_end = str_d.find("'")
+                av = str_d[:s_end]
+
+            row = [
+                sha256,
+                file_type,
+                ingest_date,
+                file_name,
+                sus_score,
+                sources,
+                av,
+                ips
+            ]
+            insert_data_row(row)
+
 def get_all():
     cur = conn.cursor()
     cur.execute("SELECT * FROM Malware;")
     result = cur.fetchall()
-    for row in result:
-        print row
-        print ""
+    # for row in result:
+    #     print row
+    #     print ""
+    print len(result)
 
 def insert_rows(num_rows):
     i = 2
@@ -103,7 +172,28 @@ def insert_rows(num_rows):
         insert_row(i)
         i = i + 2
 
+def insert_rows2(num_rows):
+    for i in range(400, num_rows):
+        insert_row(i)
+
+def delete_table():
+    statement = "DELETE FROM Malware"
+    try:
+        exec_sql(statement)
+    except pymysql.err.IntegrityError:
+        print "IntegrityError"
+
+def drop_table():
+    statement = "DROP TABLE Malware"
+    try:
+        exec_sql(statement)
+    except pymysql.err.IntegrityError:
+        print "IntegrityError"
+
+# drop_table()
 # create_table()
-insert_rows(359)
+# insert_rows2(1141)
+delete_table()
+insert_data()
 get_all()
 conn.close()
