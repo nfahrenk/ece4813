@@ -39,7 +39,7 @@ def list_malware():
                             next_page=malware.json()['next_page'],
                             prev_page=malware.json()['prev_page'])
 
-@app.route('/malware/addMalware', methods=['GET','POST'])
+@app.route('/malware/add', methods=['GET','POST'])
 def add_malware():
     if request.method == 'GET':
         return render_template('addMalware.html')
