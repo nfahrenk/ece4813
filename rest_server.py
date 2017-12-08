@@ -45,6 +45,7 @@ def add_malware():
         return render_template('addMalware.html')
     else:
         #List of malware displayed after new malware has been added
+        requests.post(BASE_URL + "/malware/add")
         list_malware()
 
 @app.route('/map', methods=['GET'])
