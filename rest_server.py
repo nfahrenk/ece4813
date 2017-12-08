@@ -49,7 +49,7 @@ def add_malware():
 
 @app.route('/map', methods=['GET'])
 def map_malware():
-    return render_template('dashboard.html', )
+    return render_template('dashboard.html', 'longitudes'=longitudes, 'latitudes'=latitudes)
         
 @app.route('/', methods=['GET'])
 def check():
