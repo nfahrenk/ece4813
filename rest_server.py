@@ -1,6 +1,6 @@
 #!flask/bin/python
 from __future__ import print_function
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, redirect
 import requests
 from urllib import urlencode
 import datetime
@@ -49,14 +49,38 @@ def add_malware():
 
 @app.route('/map', methods=['GET'])
 def map_malware():
-    return render_template('dashboard.html', )
+    response = requests.get(BASE_URL + "/map").json()
+    return render_template('dashboard.html', **response)
         
 @app.route('/', methods=['GET'])
-def check():
+def check_malware():
     response = requests.get(BASE_URL + "/check").json()
     malware = requests.get(BASE_URL + "/malware?" + urlencode({"from_ingest_date": datetime.datetime.now() - datetime.timedelta(days=7)}))
     return render_template('index.html', has_ip=response["ip_exists"], ip_address=response["source_ip"], malware=malware.json()['results'])
 
+@app.route('/malware/<string:id>', methods=['GET'])
+def view_malware(id):
+    response = requests.get(BASE_URL + "/malware/" + str(id)).json()
+    return render_template('viewMalware.html', **response)
+
+@app.route('/malware/<string:id>/edit', methods=['GET', 'POST'])
+def edit_malware(id):
+    if request.method == "GET":
+        response = requests.get(BASE_URL + "/malware/" + str(id)).json()
+        return render_template('editMalware.html', **response)
+    else:
+        headers = {'Content-Type': 'application/json'}
+        print('fuckkkk')
+        print(request.form)
+        response = requests.post(BASE_URL + "/edit/" + str(id), headers=headers, json=request.form).json()
+        print(response)
+        return redirect("/malware/" + str(id) + "/edit")
+
+@app.route('/malware/<string:id>/delete', methods=['POST'])
+def remove_malware(id):
+    headers = {'Content-Type': 'application/json'}
+    response = requests.post(BASE_URL + "/delete/" + str(id), headers=headers)
+    return redirect("/malware")
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

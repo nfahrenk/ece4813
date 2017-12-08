@@ -1,24 +1,8 @@
-<!DOCTYPE HTML>
-<html>
-
-<head>
-    <title>{% block title %}{% endblock %}</title>
-
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-</head>
-
-<style type="text/css">
-    .table.table-striped {
-        width: 75%;
-        margin: 0 auto;
-        border-width: 1px;
-        background-color: rgba(150, 150, 150, 0.26);
-        border-color: #000000;
-    }
-</style>
-
-<body>
+{% extends "base.html" %}
+{% block title %}Add Malware{% endblock %}
+{% block content %}
     <div id="myDiv"></div>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script>
         var trace1 = {
         x: [1, 2, 3, 4],
@@ -70,7 +54,4 @@
         ]
         })
     </script>
-
-</body>
-
-</html>
+{% endblock %}
