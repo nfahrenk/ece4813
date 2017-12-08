@@ -49,6 +49,9 @@ def add_malware():
 
 @app.route('/map', methods=['GET'])
 def map_malware():
+    response = request.get('https://6fjd5bdqz3.execute-api.us-east-2.amazonaws.com/prod/map')
+    longitudes = response['longitudes']
+    latitudes = response['latitudes']
     return render_template('dashboard.html', 'longitudes'=longitudes, 'latitudes'=latitudes)
         
 @app.route('/', methods=['GET'])
