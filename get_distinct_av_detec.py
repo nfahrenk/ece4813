@@ -23,7 +23,7 @@ if __name__ == '__main__':
         port = 3306
     )
     cursor = conn.cursor()
-    cursor.execute("SELECT sha256,ip_address FROM Malware WHERE ip_address LIKE '%255.255.255.255%' LIMIT 3;")
+    cursor.execute("SELECT DISTINCT(file_type) FROM Malware;")
     results = cursor.fetchall()
     print results
     cursor.close()
