@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block extra_styles %}
+<style type="text/css">
+    div.has-malware {
+        padding: 20px;
+        /*background-color: red;*/
+    }
+    body {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+    #malware {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    #malware td, #malware th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    #malware tr:nth-child(even){background-color: #f2f2f2;}
+    #malware tr:last-child{max-width: 200px;}
+
+    #malware tr:hover {background-color: #ddd;}
+
+    #malware th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #4CAF50;
+        color: white;
+    }
+</style>
+{% endblock %}
+{% block title %}Index{% endblock %}
+{% block content %}
+<p>Your ip is: {{ip_address}}</p>
+<div class="has-malware">
+    {{ "Your IP is in the database" if has_ip else "You are not in the database" }}
+</div>
+<h2>Hottest Malware</h2>
+<table id="malware">
+    <tr>
+        <th>file type</th>
+        <th>ingest date</th>
+        <th>file name</th>
+        <th>sus score</th>
+        <th>sources</th>
+        <th>av detec</th>
+        <th>ip address</th>
+    </tr>
+    {% for row in malware %}
+        <tr>
+            <td>{{row.file_type}}</td>
+            <td>{{row.ingest_date}}</td>
+            <td>{{row.file_name}}</td>
+            <td>{{row.sus_score}}</td>
+            <td>{{row.sources}}</td>
+            <td>{{row.av_detec}}</td>
+            <td>{{';<br>'.join(row.ip_address.split(';'))|safe if row.ip_address else ''}}</td>
+        </tr>
+    {% endfor %}    
+</table>
+{% endblock %}

@@ -1,10 +1,9 @@
 #!flask/bin/python
 from __future__ import print_function
 from flask import Flask, jsonify, request, render_template
-from environment import MACHINE
 import requests
 from urllib import urlencode
-import pdb
+import datetime
 app = Flask(__name__, static_url_path="")
 
 BASE_URL = "https://6fjd5bdqz3.execute-api.us-east-2.amazonaws.com/prod"
@@ -69,6 +68,13 @@ def add_malware():
     else:
         #List of malware displayed after new malware has been added
         list_malware()
+
+@app.route('/', methods=['GET'])
+def check():
+    response = requests.get(BASE_URL + "/check").json()
+    malware = requests.get(BASE_URL + "/malware?" + urlencode({"from_ingest_date": datetime.datetime.now() - datetime.timedelta(days=7)}))
+    return render_template('index.html', has_ip=response["ip_exists"], ip_address=response["source_ip"], malware=malware.json()['results'])
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
