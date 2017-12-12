@@ -1,6 +1,6 @@
 #!flask/bin/python
 from __future__ import print_function
-from flask import Flask, jsonify, request, render_template, redirect
+from flask import Flask, jsonify, request, render_template, redirect, url_for
 import requests
 from urllib import urlencode
 import datetime
@@ -75,13 +75,13 @@ def edit_malware(id):
         print(request.form)
         response = requests.post(BASE_URL + "/edit/" + str(id), headers=headers, json=request.form).json()
         print(response)
-        return redirect("/malware/" + str(id) + "/edit")
+        return redirect(url_for("edit_malware"))
 
 @app.route('/malware/<string:id>/delete', methods=['POST'])
 def remove_malware(id):
     headers = {'Content-Type': 'application/json'}
     response = requests.post(BASE_URL + "/delete/" + str(id), headers=headers)
-    return redirect("/malware")
+    return redirect(url_for("list_malware"))
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
