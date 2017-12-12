@@ -75,13 +75,13 @@ def edit_malware(id):
         print(request.form)
         response = requests.post(BASE_URL + "/edit/" + str(id), headers=headers, json=request.form).json()
         print(response)
-        return redirect(request.base_url + url_for("edit_malware"))
+        return redirect('http://' + request.base_url + 'malware/' + str(id) + '/edit')
 
 @app.route('/malware/<string:id>/delete', methods=['POST'])
 def remove_malware(id):
     headers = {'Content-Type': 'application/json'}
     response = requests.post(BASE_URL + "/delete/" + str(id), headers=headers)
-    return redirect(request.base_url + url_for("list_malware"))
+    return redirect('http://' + request.base_url + "/malware")
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
