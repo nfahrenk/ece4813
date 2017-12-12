@@ -51,7 +51,10 @@ def add_malware():
 @app.route('/map', methods=['GET'])
 def map_malware():
     response = requests.get(BASE_URL + "/map").json()
-    return render_template('dashboard.html', **response)
+    print(response)
+    latitudes = ["7.08882", "-69.68021", "43.91524", "-5.78940", "-42.13728", "9.20434", "49.16198", "59.62902"]
+    longitudes = ["154.23059", "-97.02568", "-40.12791", "114.09855", "152.73121", "-16.36421", "48.77607", "48.77607"]
+    return render_template('dashboard.html', latitudes=latitudes, longitudes=longitudes)
         
 @app.route('/', methods=['GET'])
 def check_malware():
@@ -75,13 +78,13 @@ def edit_malware(id):
         print(request.form)
         response = requests.post(BASE_URL + "/edit/" + str(id), headers=headers, json=request.form).json()
         print(response)
-        return edit_malware(id)
+        return redirect(url_for("edit_malware"))
 
 @app.route('/malware/<string:id>/delete', methods=['POST'])
 def remove_malware(id):
     headers = {'Content-Type': 'application/json'}
     response = requests.post(BASE_URL + "/delete/" + str(id), headers=headers)
-    return list_malware()
+    return redirect(url_for("list_malware"))
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
